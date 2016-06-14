@@ -3,8 +3,13 @@
   "version": "0.1.0",
   "description": "A simple Apollo-based client supporting reactive updates",
   "main": "lib/",
+  "jsnext:main": "src/",
+  "browser": "dist/bundle.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "babel src --out-dir lib",
+    "bundle": "webpack",
+    "prepublish": "npm run build && npm run bundle"
   },
   "keywords": [
     "apollo",
@@ -13,5 +18,13 @@
     "redux"
   ],
   "author": "Robin Ricard",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "webpack": "^1.13.1"
+  }
 }

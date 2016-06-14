@@ -1,0 +1,21 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true,
+    "es6": true
+  },
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "rules": {
+    "indent": [2, 2],
+    "semi": [2, "never"],
+    "comma-dangle": [2, "always-multiline"]
+  },
+  "plugins": [
+    "react"
+  ]
+}

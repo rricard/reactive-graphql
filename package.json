@@ -1,8 +1,17 @@
 {
   "scripts": {
-    "postinstall": "lerna bootstrap"
+    "postinstall": "lerna bootstrap",
+    "typecheck": "flow check",
+    "lint": "eslint packages/*/src packages/*/test"
   },
   "devDependencies": {
+    "babel-eslint": "^6.0.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "eslint": "^2.12.0",
+    "eslint-plugin-react": "^5.1.1",
+    "flow-bin": "^0.27.0",
     "lerna": "2.0.0-beta.19"
   }
 }
