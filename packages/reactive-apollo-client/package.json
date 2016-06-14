@@ -1,0 +1,17 @@
+{
+  "name": "reactive-apollo-client",
+  "version": "0.1.0",
+  "description": "A simple Apollo-based client supporting reactive updates",
+  "main": "lib/",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "apollo",
+    "reactive",
+    "graphql",
+    "redux"
+  ],
+  "author": "Robin Ricard",
+  "license": "MIT"
+}
