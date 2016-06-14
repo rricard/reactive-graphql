@@ -1,8 +1,12 @@
 {
   "scripts": {
-    "postinstall": "lerna bootstrap",
+    "test": "lerna run test",
+    "build": "lerna run build",
     "typecheck": "flow check",
-    "lint": "eslint packages/*/src packages/*/test"
+    "lint": "eslint packages/*/src packages/*/test",
+    "postinstall": "lerna bootstrap",
+    "prepublish": "lerna run prepublish",
+    "publish": "lerna publish"
   },
   "devDependencies": {
     "babel-eslint": "^6.0.4",
