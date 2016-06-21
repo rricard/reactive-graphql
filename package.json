@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "clean": "lerna run clean",
     "test": "lerna run test",
     "build": "lerna run build",
     "typecheck": "flow check",

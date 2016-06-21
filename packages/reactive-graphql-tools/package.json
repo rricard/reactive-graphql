@@ -5,6 +5,7 @@
   "main": "lib",
   "jsnext:main": "src/",
   "scripts": {
+    "clean": "rimraf lib",
     "test": "mocha --compilers js:babel-register --recursive",
     "build": "babel src --out-dir lib",
     "prepublish": "npm run build"
@@ -24,6 +25,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.9.0",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "rimraf": "^2.5.2"
   }
 }

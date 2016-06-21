@@ -6,6 +6,7 @@
   "jsnext:main": "src/",
   "browser": "dist/bundle.js",
   "scripts": {
+    "clean": "rimraf lib dist",
     "test": "mocha --compilers js:babel-register --recursive",
     "build": "babel src --out-dir lib",
     "bundle": "webpack",
@@ -27,6 +28,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.9.0",
     "mocha": "^2.5.3",
+    "rimraf": "^2.5.2",
     "webpack": "^1.13.1"
   }
 }
