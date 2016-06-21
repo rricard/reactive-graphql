@@ -39,3 +39,6 @@ jspm_packages
 # Distributed files
 packages/*/dist
 packages/*/lib
+
+# Documentation
+_book
