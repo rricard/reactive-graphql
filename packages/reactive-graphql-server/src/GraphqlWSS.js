@@ -75,7 +75,7 @@ export class GraphqlWSS extends WebSocketServer {
   // Send the socket id to the client.
   _handleConnection(ws: WebSocket) {
     const socketId = this._generateRandomID()
-    this.connections = this.connections.set(socketId, new ConnectionState())
+    this.connections = this.connections.set(socketId, new ConnectionState(ws))
     ws.on('close', () => this.connections = this.connections.delete(socketId))
     ws.send(JSON.stringify({socketId}))
   }
