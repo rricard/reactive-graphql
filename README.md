@@ -18,7 +18,7 @@ schema and a GraphQL client.
 Then, we'll see packages made to make the implementation of Reactive GraphQL
 more easier:
 
-- `reactive-graphql-server` - A set of utilities to create easily Reactive
+- `reactive-graphql-tools` - A set of utilities to create easily Reactive
   GraphQL schemas
 - `reactive-apollo-client` - An utility to bind Reactive GraphQL to the
   [Apollo](http://www.apollostack.com/) store
