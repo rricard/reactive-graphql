@@ -55,7 +55,7 @@ export class GraphqlWSS extends WebSocketServer {
   // Also setups internal connection tracking and defaults wss path to /graphql
   constructor({
     path = "/graphql",
-    ...wssOptions
+    ...wssOptions,
   }: GraphqlWebSocketServerOptions, cb?: Function) {
     super({path, ...wssOptions}, cb)
 

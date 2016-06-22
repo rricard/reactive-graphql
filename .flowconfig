@@ -3,5 +3,6 @@
 
 [ignore]
 .*gitbook.*
+.*_book.*
 .*/npm/.*
 .*/lunr/.*
