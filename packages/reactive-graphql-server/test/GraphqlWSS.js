@@ -53,12 +53,28 @@ describe('GraphqlWSS', () => {
         assert(wss.getConnectionState(ws0sid))
         assert(wss.getConnectionState(ws1sid))
         assert(!wss.getConnectionState("nope"))
+        ws0.close()
+        ws1.close()
+        wss.close()
         done()
       })
     })
+  })
 
-    process.nextTick(() => {
-
+  it('cleans up connection states', (done) => {
+    const wss = new GraphqlWSS({port: ++port})
+    const ws = new WebSocket(`ws://localhost:${port}/graphql`)
+    ws.on('message', data => {
+      const {socketId} = JSON.parse(data)
+      ws.on('close', () => {
+        setTimeout(() => {
+          assert(!wss.getConnectionState(socketId))
+          wss.close()
+          done()
+        }, 10)
+      })
+      ws.close()
     })
+
   })
 })
