@@ -24,13 +24,13 @@ Implement this interface in order to be able to receive events from a reactive
 schema:
 
 - `IReactiveNetworkLayer` - Interface to connect to a reactive schema
-  - `observable(): Rx.Observable<SchemaUpdate>` - An observable emitting
+  - `observable(): Rx.Observable<StoreUpdate>` - An observable emitting
     schema updates
   - `connectionId(): Promise<string>` - An unique identifier for the
     websocket connection that will be sent alongside the synchronous GraphQL
     query for updating later
 
-## Type `SchemaUpdate`
+## Type `StoreUpdate`
 
 This type sends events to update a synchronous request, for example, a `@live`
 or `@defer` directive could send:
@@ -58,7 +58,7 @@ Or a subscription could send:
 }
 ```
 
-- `SchemaUpdate` - Represents an update to a query
+- `StoreUpdate` - Represents an update to a query
   - `path: Array<string>` - Represents the position in the client store of
     the element updated
   - `data: mixed` - The data to push at this path
