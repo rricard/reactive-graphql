@@ -3,4 +3,4 @@
 In this part we'll setup your Reactive GraphQL link between your client and your
 schema.
 
-* [Server](/docs/setup/server.md)
+* [Server](./server.md)

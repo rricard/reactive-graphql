@@ -40,7 +40,7 @@ const schema = new GraphQLSchema({
 Note that any kind of field can be bound to a Reactive Resolver.
 
 You can find more informations about this in the [advanced section](
-/docs/advanced/resolver-wrapping.md#-reactiveresolver).
+../advanced/resolver-wrapping.md#-reactiveresolver).
 
 ## Wrapping with a polling resolver
 
@@ -77,6 +77,6 @@ and you still want to transmit changes to your client in a minimal manner:
 Polling the resolver will only emit if the resolved value changed.
 
 You can find more informations about this in the [advanced section](
-/docs/advanced/resolver-wrapping.md#-pollingresolver).
+../advanced/resolver-wrapping.md#-pollingresolver).
 
 [rx-obs]: http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html
