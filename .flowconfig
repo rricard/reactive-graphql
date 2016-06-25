@@ -1,5 +1,5 @@
 [libs]
-./flow/
+./flow-typed/
 
 [ignore]
 .*gitbook.*
