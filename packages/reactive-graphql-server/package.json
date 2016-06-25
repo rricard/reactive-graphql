@@ -21,7 +21,6 @@
   "dependencies": {
     "bson-objectid": "^1.1.4",
     "immutable": "^3.8.1",
-    "reactive-graphql-tools": "0.1.0",
     "ws": "^1.1.0"
   },
   "devDependencies": {

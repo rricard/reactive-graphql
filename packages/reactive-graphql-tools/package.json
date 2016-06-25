@@ -19,6 +19,9 @@
   ],
   "author": "Robin Ricard",
   "license": "MIT",
+  "dependencies": {
+    "reactive-graphql-server": "0.1.0"
+  },
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-preset-es2015": "^6.9.0",
