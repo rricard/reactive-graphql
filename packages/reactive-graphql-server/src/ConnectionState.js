@@ -1,10 +1,7 @@
 /* @flow */
 
 import WebSocket from 'ws'
-import {Observable} from 'rxjs/Observable'
-import 'rxjs/add/operator/mergeAll'
-
-import type {Observer} from 'rxjs'
+import * as Rx from 'rxjs'
 
 import type {StoreUpdate} from './StoreUpdate'
 
@@ -16,14 +13,12 @@ export class ConnectionState {
   // ### Store update observable
   // storeUpdateSources is an higher-order observable that merges all of
   // the observables into one common flow
-  storeUpdateSources: Observable<Observable<StoreUpdate>>;
-  storeUpdateSourcesObserver: Observer<Observable<StoreUpdate>>;
+  storeUpdateSubject: Rx.Subject<Rx.Observable<StoreUpdate>>;
 
   // ## Constructor
   // Creates a connection state with an optional WebSocket
   constructor(ws?: WebSocket) {
-    this.storeUpdateSources = new Observable(observer =>
-      this.storeUpdateSourcesObserver = observer)
+    this.storeUpdateSubject = new Rx.ReplaySubject()
     if(ws) {
       this.attachWebSocket(ws)
     }
@@ -31,14 +26,14 @@ export class ConnectionState {
 
   // ## Add a store update observable
   // Adds an observable into observation!
-  addStoreUpdateObservable(liveValue: Observable<StoreUpdate>) {
-    this.storeUpdateSourcesObserver.next(liveValue)
+  addStoreUpdateObservable(storeUpdates: Rx.Observable<StoreUpdate>) {
+    this.storeUpdateSubject.next(storeUpdates)
   }
 
   // ## Get merged observable
   // Gets all of the store updates in one observable
-  getAllStoreUpdates() {
-    return this.storeUpdateSources.mergeAll()
+  getAllStoreUpdates(): Rx.Observable {
+    return this.storeUpdateSubject.mergeAll()
   }
 
   // ## Attach the connection state to a websocket
@@ -47,5 +42,11 @@ export class ConnectionState {
     this.getAllStoreUpdates()
     .forEach((storeUpdate: StoreUpdate) =>
       ws.send(JSON.stringify(storeUpdate)))
+    .then(() => ws.close())
+  }
+
+  // ## Close observation
+  close() {
+    this.storeUpdateSubject.complete()
   }
 }
