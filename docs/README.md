@@ -5,6 +5,6 @@
   * [Server](/docs/setup/server.md)
 * [Reactive Schemas](/docs/reactive-schemas/README.md)
   * [Resolver Wrapping](/docs/reactive-schemas/resolver-wrapping.md)
-  * [Simple Definition](/docs/reactive-schemas/simple-definition.md)
+  * [Schema Definition Wrapping](/docs/reactive-schemas/schema-definition-wrapping.md)
 * [Advanced](/docs/advanced/README.md)
-  * [Network Layer](/docs/advanced/network-layer.md)
+  * [Client Network Layer](/docs/advanced/client-network-layer.md)

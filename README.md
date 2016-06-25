@@ -28,3 +28,10 @@ more easier:
 All of those subpackages are managed by [Lerna](https://lernajs.io/).
 
 ---
+
+## References
+
+- [Laney Kuenzel & Lee Byron - GraphQL Future at react-europe 2016](
+https://www.youtube.com/watch?v=ViXL0YQnioU)
+- [New features in GraphQL: Batch, defer, stream, live, and subscribe](
+https://medium.com/apollo-stack/new-features-in-graphql-batch-defer-stream-live-and-subscribe-7585d0c28b07#.ibj4lubdn)

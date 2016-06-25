@@ -1,4 +1,4 @@
-# Network Layer
+# Client Network Layer
 
 The network layer is the interface used by the client to connect to a reactive
 schema.
@@ -16,8 +16,7 @@ const reactiveNetworkLayer = new ReactiveNetworkLayer('ws://localhost/graphql')
 - `ReactiveNetworkLayer` - A default reactive network layer
   - `constructor(urlConfigOrSource: mixed)` - Creates a new network layer
     from a websocket address or configuration object supported by
-    [`Rx.Observable.webSocket`](
-http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-webSocket)
+    [`Rx.Observable.webSocket`][rx-ws]
 
 ## Interface `IReactiveNetworkLayer`
 
@@ -69,5 +68,6 @@ Or a subscription could send:
 
 - [Laney Kuenzel & Lee Byron - GraphQL Future at react-europe 2016](
   https://www.youtube.com/watch?v=ViXL0YQnioU)
-- [`Rx.Observable.webSocket`](
-  http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-webSocket)
+- [`Rx.Observable.webSocket`][rx-ws]
+
+[rx-ws]: http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-webSocket
