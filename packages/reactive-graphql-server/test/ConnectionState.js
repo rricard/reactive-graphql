@@ -16,8 +16,16 @@ describe('ConnectionState', () => {
       {path: ['s2'], data: 1}
     ]
     const cs = new ConnectionState()
-    const s1 = new Rx.ReplaySubject()
-    const s2 = new Rx.ReplaySubject()
+    const end = cs.getAllStoreUpdates()
+    .toArray()
+    .forEach((a) => {
+      assert.equal(a[0], data[0])
+      assert.equal(a[1], data[1])
+      assert.equal(a[2], data[2])
+      assert.equal(a[3], data[3])
+    })
+    const s1 = new Rx.Subject()
+    const s2 = new Rx.Subject()
     cs.addStoreUpdateObservable(s1)
     cs.addStoreUpdateObservable(s2)
     cs.close()
@@ -27,13 +35,6 @@ describe('ConnectionState', () => {
     s2.next(data[2])
     s2.next(data[3])
     s2.complete()
-    return cs.getAllStoreUpdates()
-    .toArray()
-    .forEach((a) => {
-      assert.equal(a[0], data[0])
-      assert.equal(a[1], data[1])
-      assert.equal(a[2], data[2])
-      assert.equal(a[3], data[3])
-    })
+    return end
   })
 })

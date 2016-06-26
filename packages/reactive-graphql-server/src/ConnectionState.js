@@ -18,7 +18,7 @@ export class ConnectionState {
   // ## Constructor
   // Creates a connection state with an optional WebSocket
   constructor(ws?: WebSocket) {
-    this.storeUpdateSubject = new Rx.ReplaySubject()
+    this.storeUpdateSubject = new Rx.Subject()
     if(ws) {
       this.attachWebSocket(ws)
     }
