@@ -39,10 +39,15 @@ export class ConnectionState {
   // ## Attach the connection state to a websocket
   // It will receive observed data
   attachWebSocket(ws: WebSocket) {
-    this.getAllStoreUpdates()
-    .forEach((storeUpdate: StoreUpdate) =>
-      ws.send(JSON.stringify(storeUpdate)))
-    .then(() => ws.close())
+    const wsSubscription = this.getAllStoreUpdates().subscribe({
+      next(storeUpdate: StoreUpdate) {
+        ws.send(JSON.stringify(storeUpdate))
+      },
+      complete() {
+        ws.close()
+      },
+    })
+    ws.on('close', () => wsSubscription.unsubscribe())
   }
 
   // ## Close observation

@@ -2,6 +2,7 @@
 
 import assert from 'assert'
 import WebSocket from 'ws'
+import * as Rx from 'rxjs'
 
 import {
   GraphqlWSS,
@@ -75,6 +76,24 @@ describe('GraphqlWSS', () => {
       })
       ws.close()
     })
+  })
 
+  it('should carry subscriptions', (done) => {
+    const wss = new GraphqlWSS({port: ++port})
+    const obs = new Rx.ReplaySubject()
+    obs.next({path: ['x'], data: 'y'})
+    const ws = new WebSocket(`ws://localhost:${port}/graphql`)
+    ws.on('message', data => {
+      data = JSON.parse(data)
+      if(data && data.socketId) {
+        wss.getConnectionState(data.socketId).addStoreUpdateObservable(obs)
+      }
+      if(data && data.path && data.data) {
+        assert.equal(data.path[0], 'x')
+        assert.equal(data.data, 'y')
+        ws.close()
+        done()
+      }
+    })
   })
 })
