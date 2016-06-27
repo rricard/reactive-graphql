@@ -7,12 +7,17 @@ import type {
   GraphQLResolveInfo,
 } from 'graphql'
 
-export function pollingResolver({resolve, observe}: {
+import {reactiveResolver} from './reactive'
+
+export function pollingResolver({resolve, interval}: {
   resolve: GraphQLFieldResolveFn,
   interval?: number,
   compare?: (lastResolution: any, newResolution: any) => boolean,
 }): GraphQLFieldResolveFn {
-  return (obj, args, context, info) => {
-    return resolve(obj, args, context, info)
-  }
+  return reactiveResolver({
+    resolve,
+    observe: (...args) =>
+      Rx.Observable.interval(interval || 10000/*ms*/)
+      .map(tick => resolve(...args))
+  })
 }
