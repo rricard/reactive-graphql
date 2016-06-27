@@ -1,5 +1,4 @@
 /* @flow */
 
-export function hello(name: string = "world") {
-  return `Hello ${name}!`
-}
+export * from './reactive'
+export * from './polling'
