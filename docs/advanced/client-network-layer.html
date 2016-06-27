@@ -1,0 +1,425 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Client Network Layer | Reactive GraphQL</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.4.3">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../../gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="../../gitbook/plugins/gitbook-plugin-edit-link/plugin.css">
+        
+    
+        
+        <link rel="stylesheet" href="../../gitbook/plugins/gitbook-plugin-prism/prism.css">
+        
+    
+    
+
+        
+    
+    
+    
+    <link rel="prev" href="../../docs/advanced/resolver-wrapping.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="3.2" data-basepath="../.." data-revision="Mon Jun 27 2016 23:33:07 GMT+0200 (CEST)">
+    
+
+<div class="book-summary">
+    <div class="book-search" role="search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <nav role="navigation">
+        <ul class="summary">
+            
+            
+            
+            
+
+            
+
+            
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Read Me
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="docs/setup/index.html">
+            
+                
+                    <a href="../../docs/setup/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Setup
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="docs/setup/server.html">
+            
+                
+                    <a href="../../docs/setup/server.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        Server
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/reactive-schemas/index.html">
+            
+                
+                    <a href="../../docs/reactive-schemas/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Reactive Schemas
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1" data-path="docs/reactive-schemas/resolver-wrapping.html">
+            
+                
+                    <a href="../../docs/reactive-schemas/resolver-wrapping.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.1.</b>
+                        
+                        Resolver Wrapping
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="docs/reactive-schemas/schema-definition-wrapping.html">
+            
+                
+                    <a href="../../docs/reactive-schemas/schema-definition-wrapping.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.2.</b>
+                        
+                        Schema Definition Wrapping
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/advanced/index.html">
+            
+                
+                    <a href="../../docs/advanced/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Advanced
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1" data-path="docs/advanced/resolver-wrapping.html">
+            
+                
+                    <a href="../../docs/advanced/resolver-wrapping.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                        Resolver Wrapping
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="3.2" data-path="docs/advanced/client-network-layer.html">
+            
+                
+                    <a href="../../docs/advanced/client-network-layer.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.2.</b>
+                        
+                        Client Network Layer
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+
+            
+            <li class="divider"></li>
+            <li>
+                <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                    Published with GitBook
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header" role="navigation">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../" >Reactive GraphQL</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1" role="main">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <a id="edit-link" href="https://github.com/rricard/reactive-graphql/tree/master/docs/advanced/client-network-layer.md" class="btn fa fa-edit pull-left">&nbsp;&nbsp;Edit This Page</a><h1 id="client-network-layer">Client Network Layer</h1>
+<p>The network layer is the interface used by the client to connect to a reactive
+schema.</p>
+<h2 id="default-network-layer">Default Network Layer</h2>
+<p>Until now, we only used this default network layer that just accepts a websocket
+address:</p>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>ReactiveNetworkLayer<span class="token punctuation">}</span> from <span class="token string">&apos;reactive-graphql-client&apos;</span>
+<span class="token keyword">const</span> reactiveNetworkLayer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReactiveNetworkLayer</span><span class="token punctuation">(</span><span class="token string">&apos;ws://localhost/graphql&apos;</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li><code>ReactiveNetworkLayer</code> - A default reactive network layer<ul>
+<li><code>constructor(urlConfigOrSource: mixed)</code> - Creates a new network layer
+from a websocket address or configuration object supported by
+<a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-webSocket" target="_blank"><code>Rx.Observable.webSocket</code></a></li>
+</ul>
+</li>
+</ul>
+<h2 id="interface-ireactivenetworklayer">Interface <code>IReactiveNetworkLayer</code></h2>
+<p>Implement this interface in order to be able to receive events from a reactive
+schema:</p>
+<ul>
+<li><code>IReactiveNetworkLayer</code> - Interface to connect to a reactive schema<ul>
+<li><code>observable(): Rx.Observable<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>StoreUpdate</span><span class="token punctuation">&gt;</span></span></code> - An observable emitting
+schema updates</li>
+<li><code>connectionId(): Promise<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>string</span><span class="token punctuation">&gt;</span></span></code> - An unique identifier for the
+websocket connection that will be sent alongside the synchronous GraphQL
+query for updating later</li>
+</ul>
+</li>
+</ul>
+<h2 id="type-storeupdate">Type <code>StoreUpdate</code></h2>
+<p>This type sends events to update a synchronous request, for example, a <code>@live</code>
+or <code>@defer</code> directive could send:</p>
+<pre><code class="lang-json"><span class="token punctuation">{</span>
+  <span class="token string">&quot;path&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;ROOT_QUERY&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;feed&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;stories&quot;</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">&quot;comments&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token string">&quot;data&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token string">&quot;author&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">&quot;name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Robin Ricard&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;message&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Reactive GraphQL rocks!&quot;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Or a subscription could send:</p>
+<pre><code class="lang-json"><span class="token punctuation">{</span>
+  <span class="token string">&quot;path&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;ROOT_SUBSCRIPTION&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;likeCount&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token string">&quot;data&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">&quot;likeCount&quot;</span><span class="token punctuation">:</span> <span class="token number">5</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<ul>
+<li><code>StoreUpdate</code> - Represents an update to a query<ul>
+<li><code>path: Array<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>string</span><span class="token punctuation">&gt;</span></span></code> - Represents the position in the client store of
+the element updated</li>
+<li><code>data: mixed</code> - The data to push at this path</li>
+</ul>
+</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ViXL0YQnioU" target="_blank">Laney Kuenzel &amp; Lee Byron - GraphQL Future at react-europe 2016</a></li>
+<li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-webSocket" target="_blank"><code>Rx.Observable.webSocket</code></a></li>
+</ul>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../../docs/advanced/resolver-wrapping.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Resolver Wrapping"><i class="fa fa-angle-left"></i></a>
+        
+        
+    </div>
+</div>
+
+        
+<script src="../../gitbook/app.js"></script>
+
+    
+    <script src="../../gitbook/plugins/gitbook-plugin-edit-link/plugin.js"></script>
+    
+
+    
+    <script src="../../gitbook/plugins/gitbook-plugin-github/plugin.js"></script>
+    
+
+    
+    <script src="../../gitbook/plugins/gitbook-plugin-anker-enable/anker.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2},"edit-link":{"base":"https://github.com/rricard/reactive-graphql/tree/master","label":"Edit This Page"},"github":{"url":"https://github.com/rricard/reactive-graphql/"}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

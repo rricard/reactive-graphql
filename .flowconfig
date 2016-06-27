@@ -1,0 +1,8 @@
+[libs]
+./flow-typed/
+
+[ignore]
+.*gitbook.*
+.*_book.*
+.*/npm/.*
+.*/lunr/.*
