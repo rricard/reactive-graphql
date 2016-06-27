@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as Rx from 'rxjs'
-import {completeValue} from 'graphql/execution/execute'
+import {completeValueCatchingError} from './graphql/execute-override'
 
 import type {
   GraphQLFieldResolveFn,
@@ -23,30 +23,33 @@ export function reactiveResolver({resolve, observe}: {
     if(info.fieldASTs.directives.filter(
       d => d.name.value === "live"
     ).length > 0) {
-      const exeContext = {
-        schema: info.schema,
-        fragments: info.fragments,
-        rootValue: info.rootValue,
-        operation: info.operation,
-        variableValues: info.variableValues,
-        contextValue: context,
-      };
       context.connectionState.addStoreUpdateObservable(
         observe(obj, args, context, info)
-        .map(observedValue => Rx.Observable.fromPromise(completeValue(
+        .map(observedValue => {
+          let exeContext = {
+            schema: info.schema,
+            fragments: info.fragments,
+            rootValue: info.rootValue,
+            operation: info.operation,
+            variableValues: info.variableValues,
+            contextValue: context,
+            errors: [],
+          };
+          const data = completeValueCatchingError(
             exeContext,
             info.returnType,
             info.fieldASTs,
             info,
             info.path,
             observedValue
-          )
-          .then(completedValue => ({
+          );
+          return {
             path: info.path,
-            data: completedValue,
-          }))
-        ))
-        .mergeAll()
+            data,
+            errors: exeContext.errors.length > 0 ?
+              exeContext.errors : undefined,
+          };
+        })
       )
     }
 
