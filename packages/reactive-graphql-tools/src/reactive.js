@@ -26,61 +26,64 @@ export function reactiveResolver({resolve, observe}: {
   ) => Rx.Observable<mixed>,
 }): GraphQLFieldResolveFn {
   return (obj, args, context, info) => {
-    const {
-      fieldASTs: [field],
-      returnType,
-      fragments,
-      variableValues,
-      schema,
-    } = info
-    if(field.directives.filter(
-      d => d.name.value === "live"
-    ).length > 0) {
-      context.connectionState.addStoreUpdateObservable(
-        observe(obj, args, context, info)
-        .map(observedValue => {
-          if(field.selectionSet) {
-            const fieldExecutionSchema = new GraphQLSchema({
-              query: returnType,
-              directives: schema.getDirectives(),
-            })
-            const fieldExecutionOperationAST: OperationDefinition = {
-              kind: 'OperationDefinition',
-              operation: 'query',
-              selectionSet: field.selectionSet,
-            }
-            const fieldExecutionDocumentAST: Document = {
-              kind: 'Document',
-              definitions: [
-                fieldExecutionOperationAST,
-                ...Object.keys(fragments).map(k => fragments[k])
-              ]
-            }
-            return Rx.Observable.fromPromise(
-              execute(
-                fieldExecutionSchema,
-                fieldExecutionDocumentAST,
-                observedValue,
-                context,
-                variableValues
+    return Promise.resolve(resolve(obj, args, context, info))
+    .then(resolvedValue => {
+      const {
+        fieldASTs: [field],
+        returnType,
+        fragments,
+        variableValues,
+        schema,
+      } = info
+      if(field.directives.filter(
+        d => d.name.value === "live"
+      ).length > 0) {
+        context.connectionState.addStoreUpdateObservable(
+          observe(obj, args, context, info)
+          .map(observedValue => {
+            if(field.selectionSet) {
+              const fieldExecutionSchema = new GraphQLSchema({
+                query: returnType,
+                directives: schema.getDirectives(),
+              })
+              const fieldExecutionOperationAST: OperationDefinition = {
+                kind: 'OperationDefinition',
+                operation: 'query',
+                selectionSet: field.selectionSet,
+              }
+              const fieldExecutionDocumentAST: Document = {
+                kind: 'Document',
+                definitions: [
+                  fieldExecutionOperationAST,
+                  ...Object.keys(fragments).map(k => fragments[k])
+                ]
+              }
+              return Rx.Observable.fromPromise(
+                execute(
+                  fieldExecutionSchema,
+                  fieldExecutionDocumentAST,
+                  observedValue,
+                  context,
+                  variableValues
+                )
+                .then(({data, errors}) => ({
+                  path: info.path,
+                  data,
+                  errors,
+                }))
               )
-              .then(({data, errors}) => ({
+            } else {
+              return Rx.Observable.fromPromise(Promise.resolve({
                 path: info.path,
-                data,
-                errors,
+                data: observedValue,
               }))
-            )
-          } else {
-            return Rx.Observable.fromPromise(Promise.resolve({
-              path: info.path,
-              data: observedValue,
-            }))
-          }
-        })
-        .mergeAll()
-      )
-    }
+            }
+          })
+          .mergeAll()
+        )
+      }
 
-    return resolve(obj, args, context, info)
+      return resolvedValue
+    })
   }
 }
