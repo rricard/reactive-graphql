@@ -1,11 +1,17 @@
 /* @flow */
 
 import * as Rx from 'rxjs'
-import {completeValueCatchingError} from './graphql/execute-override'
+import {
+  execute,
+  GraphQLSchema,
+} from 'graphql'
 
 import type {
   GraphQLFieldResolveFn,
   GraphQLResolveInfo,
+  Field,
+  Document,
+  OperationDefinition,
 } from 'graphql'
 import type {
   ConnectionState
@@ -20,36 +26,58 @@ export function reactiveResolver({resolve, observe}: {
   ) => Rx.Observable<mixed>,
 }): GraphQLFieldResolveFn {
   return (obj, args, context, info) => {
-    if(info.fieldASTs.directives.filter(
+    const {
+      fieldASTs: [field],
+      returnType,
+      fragments,
+      variableValues,
+      schema,
+    } = info
+    if(field.directives.filter(
       d => d.name.value === "live"
     ).length > 0) {
       context.connectionState.addStoreUpdateObservable(
         observe(obj, args, context, info)
         .map(observedValue => {
-          let exeContext = {
-            schema: info.schema,
-            fragments: info.fragments,
-            rootValue: info.rootValue,
-            operation: info.operation,
-            variableValues: info.variableValues,
-            contextValue: context,
-            errors: [],
-          };
-          const data = completeValueCatchingError(
-            exeContext,
-            info.returnType,
-            info.fieldASTs,
-            info,
-            info.path,
-            observedValue
-          );
-          return {
-            path: info.path,
-            data,
-            errors: exeContext.errors.length > 0 ?
-              exeContext.errors : undefined,
-          };
+          if(field.selectionSet) {
+            const fieldExecutionSchema = new GraphQLSchema({
+              query: returnType,
+              directives: schema.getDirectives(),
+            })
+            const fieldExecutionOperationAST: OperationDefinition = {
+              kind: 'OperationDefinition',
+              operation: 'query',
+              selectionSet: field.selectionSet,
+            }
+            const fieldExecutionDocumentAST: Document = {
+              kind: 'Document',
+              definitions: [
+                fieldExecutionOperationAST,
+                ...Object.keys(fragments).map(k => fragments[k])
+              ]
+            }
+            return Rx.Observable.fromPromise(
+              execute(
+                fieldExecutionSchema,
+                fieldExecutionDocumentAST,
+                observedValue,
+                context,
+                variableValues
+              )
+              .then(({data, errors}) => ({
+                path: info.path,
+                data,
+                errors,
+              }))
+            )
+          } else {
+            return Rx.Observable.fromPromise(Promise.resolve({
+              path: info.path,
+              data: observedValue,
+            }))
+          }
         })
+        .mergeAll()
       )
     }
 
