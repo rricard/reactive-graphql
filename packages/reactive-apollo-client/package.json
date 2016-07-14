@@ -21,7 +21,8 @@
   "author": "Robin Ricard",
   "license": "MIT",
   "dependencies": {
-    "reactive-graphql-client": "0.1.0"
+    "reactive-graphql-client": "0.1.0",
+    "rxjs": "^5.0.0-beta.9"
   },
   "devDependencies": {
     "apollo-client": "^0.4.1",
