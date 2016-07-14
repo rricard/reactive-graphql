@@ -1,11 +1,13 @@
 /* @flow */
 
+import assert from 'assert'
 import * as Rx from 'rxjs'
 import {
   graphql,
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLInt,
+  GraphQLString,
 } from 'graphql'
 import {
   ConnectionState,
@@ -21,7 +23,7 @@ const reactiveSchema = new GraphQLSchema({
     name: 'RootQuery',
     fields: () => ({
       timestamp: {
-        type: GraphQLInt,
+        type: GraphQLString,
         resolve: reactiveResolver({
           resolve: () => Date.now(),
           observe: () => Rx.Observable.interval(10)
@@ -64,14 +66,20 @@ const reactiveSchema = new GraphQLSchema({
 })
 
 describe('reactive resolver wrapping', () => {
-  it('should observe a scalar field' , () => {
+  it('should observe a scalar field' , (done) => {
+    const testStartTimestamp = Date.now()
+    let resolvedTimestamp = null
     const connectionState = new ConnectionState()
-    const csSubs = connectionState.getAllStoreUpdates().subscribe({
-      next(ts) {
-        console.log('new timestamp', ts)
-      }
+    const csSubs = connectionState.getAllStoreUpdates()
+    .forEach(({path, data}) => {
+      assert.equal(path.length, 1)
+      assert.equal(path[0], "timestamp")
+      const liveTimestamp = data
+      assert(liveTimestamp > resolvedTimestamp)
+      done()
     })
-    return graphql(
+
+    graphql(
       reactiveSchema,
       `
         {
@@ -82,8 +90,8 @@ describe('reactive resolver wrapping', () => {
       {connectionState}
     )
     .then(({data, errors}) => {
-      console.log(data, errors)
-      return new Promise(res => setInterval(res, 100));
+      resolvedTimestamp = data.timestamp
+      assert(resolvedTimestamp > testStartTimestamp)
     })
   })
 })
