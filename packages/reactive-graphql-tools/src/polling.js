@@ -9,7 +9,7 @@ import type {
 
 import {reactiveResolver} from './reactive'
 
-export function pollingResolver({resolve, interval}: {
+export function pollingResolver({resolve, interval = 10000/*ms*/}: {
   resolve: GraphQLFieldResolveFn,
   interval?: number,
   compare?: (lastResolution: any, newResolution: any) => boolean,
@@ -17,7 +17,7 @@ export function pollingResolver({resolve, interval}: {
   return reactiveResolver({
     resolve,
     observe: (...args) =>
-      Rx.Observable.interval(interval || 10000/*ms*/)
+      Rx.Observable.interval(interval)
       .map(tick => resolve(...args))
   })
 }
