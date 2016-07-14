@@ -92,9 +92,10 @@ export function reactiveResolver({resolve, observe}: {
     } = info
     return Promise.resolve(resolve(obj, args, context, info))
     .then(resolvedValue => {
-      if(field.directives.filter(
-        d => d.name.value === "live"
-      ).length > 0) {
+      if(
+        field.directives.some(d => d.name.value === "live") &&
+        context && context.connectionState
+      ) {
         const liveObservable = observe(obj, args, context, info)
         handleLiveObservable(liveObservable, context.connectionState, info)
       }
