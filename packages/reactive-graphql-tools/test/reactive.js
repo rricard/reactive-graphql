@@ -36,19 +36,19 @@ const reactiveSchema = new GraphQLSchema({
           fields: () => ({
             millisecond: {
               type: GraphQLInt,
-              resolve: (date) => date.millisecond,
+              resolve: (date) => date.getMilliseconds(),
             },
             second: {
               type: GraphQLInt,
-              resolve: (date) => date.second,
+              resolve: (date) => date.getSeconds(),
             },
             minute: {
               type: GraphQLInt,
-              resolve: (date) => date.minute,
+              resolve: (date) => date.getMinutes(),
             },
             hour: {
               type: GraphQLInt,
-              resolve: (date) => date.hour,
+              resolve: (date) => date.getHours(),
             },
           }),
         }),
@@ -70,14 +70,15 @@ describe('reactive resolver wrapping', () => {
     const testStartTimestamp = Date.now()
     let resolvedTimestamp = null
     const connectionState = new ConnectionState()
-    const csSubs = connectionState.getAllStoreUpdates()
-    .forEach(({path, data}) => {
-      csSubs.unsubscribe()
-      assert.equal(path.length, 1)
-      assert.equal(path[0], "timestamp")
-      const liveTimestamp = data
-      assert(liveTimestamp > resolvedTimestamp)
-      done()
+    const csSubs = connectionState.getAllStoreUpdates().subscribe({
+      next: ({path, data}) => {
+        csSubs.unsubscribe()
+        assert.equal(path.length, 1)
+        assert.equal(path[0], "timestamp")
+        const liveTimestamp = data
+        assert(liveTimestamp > resolvedTimestamp)
+        done()
+      }
     })
 
     graphql(
@@ -95,5 +96,42 @@ describe('reactive resolver wrapping', () => {
       assert(resolvedTimestamp > testStartTimestamp)
     })
   })
+
+  it('should observe an object type field' , (done) => {
+    const connectionState = new ConnectionState()
+    let resolvedTime = null
+    const csSubs = connectionState.getAllStoreUpdates().subscribe({
+      next: ({path, data}) => {
+        csSubs.unsubscribe()
+        assert.equal(path.length, 1)
+        assert.equal(path[0], "time")
+        assert(resolvedTime && (
+          data.millisecond > resolvedTime.millisecond ||
+          data.second > resolvedTime.second ||
+          data.minute > resolvedTime.minute ||
+          data.hour > resolvedTime.hour
+        ))
+        done()
+      }
+    })
+
+    graphql(
+      reactiveSchema,
+      `
+        {
+          time @live {
+            millisecond
+            second
+            minute
+            hour
+          }
+        }
+      `,
+      {},
+      {connectionState}
+    )
+    .then(({data, errors}) => {
+      resolvedTime = data.time
+    })
   })
 })
