@@ -72,6 +72,7 @@ describe('reactive resolver wrapping', () => {
     const connectionState = new ConnectionState()
     const csSubs = connectionState.getAllStoreUpdates()
     .forEach(({path, data}) => {
+      csSubs.unsubscribe()
       assert.equal(path.length, 1)
       assert.equal(path[0], "timestamp")
       const liveTimestamp = data
@@ -93,5 +94,6 @@ describe('reactive resolver wrapping', () => {
       resolvedTimestamp = data.timestamp
       assert(resolvedTimestamp > testStartTimestamp)
     })
+  })
   })
 })
