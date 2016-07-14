@@ -4,7 +4,6 @@ import * as Rx from 'rxjs'
 
 import type {
   GraphQLFieldResolveFn,
-  GraphQLResolveInfo,
 } from 'graphql'
 
 import {reactiveResolver} from './reactive'
@@ -18,6 +17,6 @@ export function pollingResolver({resolve, interval = 10000/*ms*/}: {
     resolve,
     observe: (...args) =>
       Rx.Observable.interval(interval)
-      .map(tick => resolve(...args))
+      .map(() => resolve(...args)),
   })
 }

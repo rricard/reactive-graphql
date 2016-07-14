@@ -13,7 +13,7 @@ describe('ConnectionState', () => {
       {path: ['s1'], data: 0},
       {path: ['s1'], data: 1},
       {path: ['s2'], data: 0},
-      {path: ['s2'], data: 1}
+      {path: ['s2'], data: 1},
     ]
     const cs = new ConnectionState()
     const end = cs.getAllStoreUpdates()

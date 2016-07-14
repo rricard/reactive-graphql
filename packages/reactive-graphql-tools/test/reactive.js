@@ -27,7 +27,7 @@ const reactiveSchema = new GraphQLSchema({
         resolve: reactiveResolver({
           resolve: () => Date.now(),
           observe: () => Rx.Observable.interval(10)
-            .map(tick => Date.now()),
+            .map(() => Date.now()),
         }),
       },
       time: {
@@ -78,7 +78,7 @@ describe('reactive resolver wrapping', () => {
         const liveTimestamp = data
         assert(liveTimestamp > resolvedTimestamp)
         done()
-      }
+      },
     })
 
     graphql(
@@ -91,7 +91,7 @@ describe('reactive resolver wrapping', () => {
       {},
       {connectionState}
     )
-    .then(({data, errors}) => {
+    .then(({data}) => {
       resolvedTimestamp = data.timestamp
       assert(resolvedTimestamp > testStartTimestamp)
     })
@@ -112,7 +112,7 @@ describe('reactive resolver wrapping', () => {
           data.hour > resolvedTime.hour
         ))
         done()
-      }
+      },
     })
 
     graphql(
@@ -130,7 +130,7 @@ describe('reactive resolver wrapping', () => {
       {},
       {connectionState}
     )
-    .then(({data, errors}) => {
+    .then(({data}) => {
       resolvedTime = data.time
     })
   })

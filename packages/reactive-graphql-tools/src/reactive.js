@@ -9,12 +9,11 @@ import {
 import type {
   GraphQLFieldResolveFn,
   GraphQLResolveInfo,
-  Field,
   Document,
   OperationDefinition,
 } from 'graphql'
 import type {
-  ConnectionState
+  ConnectionState,
 } from 'reactive-graphql-server'
 
 type ObserveFunction = (
@@ -53,8 +52,8 @@ function handleLiveObservable(
         kind: 'Document',
         definitions: [
           fieldExecutionOperationAST,
-          ...Object.keys(fragments).map(k => fragments[k])
-        ]
+          ...Object.keys(fragments).map(k => fragments[k]),
+        ],
       }
       return Rx.Observable.fromPromise(
         execute(
